@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Calendar Generator</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+}
+table {
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+th {
+    background-color:light blue;
+}
+.sunday, .second-saturday {
+    color: red;
+}
+.second-saturday {
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<h2>Calendar Generator</h2>
+
+<label>Enter Year:</label>
+<input type="number" id="year" placeholder="Year">
+
+<label>Enter Month:</label>
+<input type="number" id="month" min="1" max="12" placeholder="Month">
+
+<button onclick="generateCalendar()">Generate Calendar</button>
+
+<div id="calendar-container"></div>
+
+<script>
+function generateCalendar() {
+let year = Number(document.getElementById("year").value);
+let month = Number(document.getElementById("month").value);
+if (year < 1900 || year > 2100 || month < 1 || month > 12 ||
+!document.getElementById("year").value ||
+!document.getElementById("month").value) {
+alert("Enter a valid year and month");
+return;
+}
+let days = new Date(year, month, 0).getDate();
+let firstDay = new Date(year, month - 1, 1).getDay();
+let html = "<table><tr>";
+let weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+for (let day of weeks) {
+html += "<th>" + day + "</th>";
+ }
+html += "</tr><tr>";
+for (let i = 0; i < firstDay; i++) {
+html += "<td></td>";
+}
+ for (let day = 1; day <= days; day++) {
+ let date = new Date(year, month - 1, day);
+ let cls = "";
+if (date.getDay() === 0) {
+cls = "sunday";
+} else if (date.getDay() === 6 &&
+Math.ceil(day / 7) === 2) {
+cls = "second-saturday";
+}
+html += '<td class="' + cls +
+'" onclick="alert(\'You clicked day ' + day + '\')">' +
+day + '</td>';
+if (date.getDay() === 6 && day !== days) {
+html += "</tr><tr>";
+}
+}
+
+html += "</tr></table>";
+document.getElementById("calendar-container").innerHTML = html;
+}
+</script>
+
+</body>
+
+
+
+
